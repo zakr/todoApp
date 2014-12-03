@@ -36,14 +36,35 @@
             <div class="col-sm-4 col-sm-offset-4">
 
                 <!-- LOOP OVER THE TODOS IN $scope.todos -->
-                <div class="checkbox" ng-repeat="todo in todos">
+                <div class="checkbox" ng-repeat="todo in todos | filter: {done:false}">
                     <label>
-                        <input type="checkbox" ng-click="deleteTodo(todo._id)"> {{ todo.text }}
+                        <input type="checkbox" ng-click="checkTodo(todo, todo._id)"> {{ todo.text }}
                     </label>
+                    <span style="margin-left:5px;color:red;cursor:pointer"  class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteTodo(todo._id)"></span>
+                </div>
+                <hr>
+                <div class="checkbox" ng-repeat="todo in todos | filter: {done:true}">
+                    <label style="color:#999">
+                        <input checked="true" type="checkbox" ng-click="checkTodo(todo, todo._id)"> {{ todo.text }}
+                    </label>
+                    <span style="margin-left:5px;color:red;cursor:pointer" class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteTodo(todo._id)"></span>
                 </div>
 
             </div>
         </div>
+
+        <!-- TO-DONE LIST -->
+        <!-- <div id="todone-list" class="row">
+            <div class="col-sm-4 col-sm-offset-4">
+
+                <div ng-repeat="todo in todos | filter: {done:true}">
+                    <label>
+                        <span style="color:lightgrey">{{ todo.text }}</span>
+                    </label>
+                </div>
+
+            </div>
+        </div> -->
 
         <!-- FORM TO CREATE TODOS -->
         <div id="todo-form" class="row">
