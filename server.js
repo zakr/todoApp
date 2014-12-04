@@ -21,7 +21,9 @@ app.use(methodOverride());
 // Model
 var Todo = mongoose.model('Todo', {
 	text : String,
-	done : Boolean
+	done : Boolean,
+	urgent : Boolean,
+	tab : String
 });
 
 // Routes
@@ -35,7 +37,8 @@ app.get('/api/todos', function(req, res){
 app.post('/api/todos', function(req, res){
 	Todo.create({
 		text: req.body.text,
-		done: false
+		done: req.body.done,
+		tab: req.body.tab
 	}, function(err, todo){
 		if(err) res.send(err)
 		Todo.find(function(err, todos){
@@ -45,10 +48,13 @@ app.post('/api/todos', function(req, res){
 	});
 });
 
-app.put('/api/todos/:todo_id/toggle', function(req, res){
+app.put('/api/todos/:todo_id', function(req, res){
 	Todo.findById(req.params.todo_id, function(err, todo){
 		if(err) res.send(err)
-		todo.done = !todo.done;
+		todo.text = req.body.text;
+		todo.done = req.body.done;
+		todo.urgent = req.body.urgent;
+		todo.tab = req.body.tab;
 		todo.save(function(err){
 			if(err) console.log('Error Toggling Post');
 		})

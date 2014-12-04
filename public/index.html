@@ -10,11 +10,7 @@
 
     <!-- SCROLLS -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
-    <style>
-        html                    { overflow-y:scroll; }
-        body                    { padding-top:50px; }
-        #todo-list              { margin-bottom:30px; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 
     <!-- SPELLS -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
@@ -28,57 +24,54 @@
 
         <!-- HEADER AND TODO COUNT -->
         <div class="jumbotron text-center">
-            <h1>I'm a Todo-aholic <span class="label label-info">{{ todos.length }}</span></h1>
+            <h1>The Todo List <span class="label label-danger">{{ getUrgent() }}</span> <span class="label label-warning">{{ getRemaining() - getUrgent() }}</span> <span class="label label-success">{{ getFinished() }}</span></h1>
         </div>
 
         <!-- TODO LIST -->
         <div id="todo-list" class="row">
-            <div class="col-sm-4 col-sm-offset-4">
+            <div class="col-sm-8 col-sm-offset-2 row">
 
-                <!-- LOOP OVER THE TODOS IN $scope.todos -->
-                <div class="checkbox" ng-repeat="todo in todos | filter: {done:false}">
-                    <label>
-                        <input type="checkbox" ng-click="checkTodo(todo, todo._id)"> {{ todo.text }}
-                    </label>
-                    <span style="margin-left:5px;color:red;cursor:pointer"  class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteTodo(todo._id)"></span>
-                </div>
-                <hr>
-                <div class="checkbox" ng-repeat="todo in todos | filter: {done:true}">
-                    <label style="color:#999">
-                        <input checked="true" type="checkbox" ng-click="checkTodo(todo, todo._id)"> {{ todo.text }}
-                    </label>
-                    <span style="margin-left:5px;color:red;cursor:pointer" class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteTodo(todo._id)"></span>
-                </div>
+                <ul class="nav nav-tabs row">
+                    <li ng-repeat="tab in tabs" ng-class="{active: tab == activeTab}">
+                        <a href="#" ng-click="changeTab(tab)">
+                            {{tab}}
+                        </a>
+                        
+                    </li>
+                </ul>
 
-            </div>
-        </div>
+                <div class="row todoContainer">
+                    <div class="col-sm-10 col-sm-offset-1">
 
-        <!-- TO-DONE LIST -->
-        <!-- <div id="todone-list" class="row">
-            <div class="col-sm-4 col-sm-offset-4">
+                        <!-- LOOP OVER THE TODOS IN $scope.todos -->
+                        <div class="checkbox" ng-repeat="todo in todos | filter : {done:false} | filter : {tab:activeTab}">
+                            <span style="margin-right:5px;cursor:pointer" ng-class="{active:todo.urgent}" class="glyphicon glyphicon-exclamation-sign urgent" aria-hidden="true" ng-click="toggleUrgent(todo)"></span>
+                            <label>
+                                <input type="checkbox" ng-click="checkTodo(todo, todo._id)"> {{ todo.text }}
+                            </label>
+                            <span style="margin-left:5px;color:red;cursor:pointer"  class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteTodo(todo._id)"></span>
+                        </div>
+                        <hr>
+                        <div class="checkbox" ng-repeat="todo in todos | filter: {done:true} | filter : {tab:activeTab}">
+                            <label style="color:#999">
+                                <input checked="true" type="checkbox" ng-click="checkTodo(todo, todo._id)"> {{ todo.text }}
+                            </label>
+                            <span style="margin-left:5px;color:red;cursor:pointer" class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteTodo(todo._id)"></span>
+                        </div>
 
-                <div ng-repeat="todo in todos | filter: {done:true}">
-                    <label>
-                        <span style="color:lightgrey">{{ todo.text }}</span>
-                    </label>
-                </div>
+                        <!-- FORM TO CREATE TODOS -->
+                        <form>
+                            <div class="form-group">
 
-            </div>
-        </div> -->
+                                <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
+                                <input type="text" class="form-control input-lg text-center" placeholder="What do you want to do?" ng-model="formData">
+                            </div>
 
-        <!-- FORM TO CREATE TODOS -->
-        <div id="todo-form" class="row">
-            <div class="col-sm-8 col-sm-offset-2 text-center">
-                <form>
-                    <div class="form-group">
-
-                        <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-                        <input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy that will love me forever" ng-model="formData.text">
+                            <!-- createToDo() WILL CREATE NEW TODOS -->
+                            <button type="submit" class="btn btn-primary btn-lg" ng-click="createTodo()">Add</button>
+                        </form>
                     </div>
-
-                    <!-- createToDo() WILL CREATE NEW TODOS -->
-                    <button type="submit" class="btn btn-primary btn-lg" ng-click="createTodo()">Add</button>
-                </form>
+                </div>
             </div>
         </div>
 

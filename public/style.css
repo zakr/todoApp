@@ -1,0 +1,25 @@
+html{
+	overflow-y:scroll;
+}
+
+body{
+	padding-top:50px;
+}
+
+#todo-list{
+	margin-bottom:30px;
+}
+
+.todoContainer{
+	border: 1px solid #ddd;
+	border-top: none;
+}
+
+.nav-tabs>li>a{
+	border: 1px solid #eee;
+	border-bottom-color: transparent;
+}
+
+.urgent.active{
+	color: red;
+}
